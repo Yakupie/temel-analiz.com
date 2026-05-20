@@ -26,4 +26,6 @@ Astro kullandım deneyim olarak güzeldi saf html css js yazmayı ozlemisim ama 
 
 Netlify link (Live Demo) : glittering-smakager-f9f1fb.netlify.app
 
-
+<img src="photo1.png" width="800" />
+<img src="photo2.png" width="800" />
+<img src="photo2.png" width="800" />
