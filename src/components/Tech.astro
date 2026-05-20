@@ -1,0 +1,70 @@
+---
+interface Porps {
+    image?: string
+    text?: string
+    bgColor?: string
+}
+
+const { image , text , bgColor} = Astro.props
+---
+
+<div class="container" style={`background-color: ${bgColor};`}>
+    <div class="photo">
+        <img src={image} alt={text} width="250" height="50"/>
+    </div>
+    <div class="text">{text}</div>
+</div>
+
+<style is:global>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    @font-face{
+        font-family: "Montserrat";
+        src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
+        font-weight: 600;
+        font-display: swap;
+    }
+</style>
+
+<style>
+    .container{
+        width: 9rem;
+        height: 3rem;
+        display: flex;
+        border-radius: 2rem;
+        box-shadow: 5px 5px 10px black;
+    }
+    .photo{
+        width: 40%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .photo img{
+        width: 50%;
+        height: 50%;
+    }
+    .text{
+        width: 60%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.9rem;
+    }
+
+
+    @media screen and (min-width : 900px) and (max-width : 1480px){
+        .container{
+            width: 9rem;
+            height: 2rem;
+        }
+        .photo img{
+            width: 30%;
+        }
+    }
+</style>

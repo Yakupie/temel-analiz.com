@@ -1,0 +1,203 @@
+---
+import { Image } from "astro:assets";
+
+import Navbar from "../components/Navbar.astro"
+import Card from "../components/Card.astro"
+
+import UserIcon from '../../public/icons/UserIcon.astro';
+import TimeIcon from '../../public/icons/TimeIcon.astro';
+import AnalysisIcon from '../../public/icons/AnalysisIcon.astro';
+
+import backgroundImage from "../assets/background.webp";
+
+---
+<html lang="tr">
+
+<title>Hoş Geldin :3</title>
+
+<head>
+<link rel="preload" fetchpriority="high" as="image" href="/images/background.webp" type="image/webp" />
+
+<link rel-preload rel="preload" href="/fonts/JosefinSans-Light.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+<link rel="preload" href="/fonts/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+<meta name="description" content="Tamamen ücretsiz, reklamsız ve süper hızlı temel analiz platformu. Borsa hisselerini gereksiz karmaşa olmadan en güncel verilerle hemen incelemeye başlayın!" />
+</head>
+
+</head>
+
+
+<main class="indexContainer">
+	<Image src={backgroundImage} alt="Temel Analiz Arka Planı" loading="eager" fetchpriority="high" class="bgImage"/>
+	<Navbar/>
+	<div class="container">
+		<div class="containerWrapper">
+			<div class="containerTextArea">
+				<div class="header">Gelecegin Hisselerini Ücretsiz Kesfedin</div>
+				<div class="text">Borsa İstanbul verilerini ücretsiz filtreleyin, karmasık rasyoları çözerek bilinçli yatırım kararları alın.</div>
+				<a href="/hisseler"><button id="hisseButton">
+				    <span id="buttonSpan">Hisseleri Kesfet</span>
+				</button></a>
+			</div>
+            <div class="containerCardArea">
+                <Card backgroundColor="#C4E9D7" number="0" text="Ziyaret Sayısı">
+                    <UserIcon slot="icon" />
+                </Card>
+                <Card backgroundColor="#F7E7B4" number="7/24" text="Hizmet Süresi">
+                    <TimeIcon slot="icon" />
+                </Card>
+                <Card backgroundColor="#FCD6CB" number="721" text="Hisse Sayısı">
+                    <AnalysisIcon slot="icon" />
+                </Card>
+            </div>
+		</div>
+	</div>
+</main>
+
+
+</html>
+
+<style is:global>
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	@font-face{
+		font-family: "Josefin-Sans";
+		src: url("/fonts/JosefinSans-Light.woff2") format("woff2");
+		font-display: swap;
+		font-weight: 400;
+	}
+	@font-face{
+        font-family: "Montserrat";
+        src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
+		font-weight: 700;
+        font-display: swap;
+    }
+</style>
+
+<style>
+	.indexContainer{
+		width: 100%;
+		min-height: 100vh;
+		position: relative;
+		overflow: hidden;
+	}
+	.bgImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+
+	.container{
+		width: 100%;
+		min-height: 90vh;
+		padding: 2rem 0rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-grow: 1;
+	}
+
+	
+	.containerWrapper{
+		width: 60%;
+		display: flex;
+		flex-direction: column;
+		height: 80%;
+		gap: 3rem;
+	}
+
+
+	.containerTextArea{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+	.containerCardArea{
+		width: 100%;
+		min-height: 200px;
+		display: flex;
+		justify-content: space-between;
+		align-items: stretch;
+	}
+
+
+	.header{
+		font-family: "Montserrat", sans-serif;
+		font-size: 4rem;
+		text-align: center;
+	}
+	.text{
+		font-family: "Josefin-Sans", sans-serif;
+		font-size: 1.1rem;
+		text-align: center;
+	}
+	#hisseButton{
+		width: 14rem;
+		height: 3.5rem;
+		border-radius: 2rem;
+		border: none;
+		font-family: "Montserrat", sans-serif;
+		color: black;
+		font-size: 1rem;
+		background-color: black;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	#buttonSpan{
+		border-radius: 2rem;
+		background-color: white;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transform: translateY(-5px);
+		transition: 0.2s ease-in-out;
+	}
+	#buttonSpan:hover{
+		transform: translateY(-7px);
+	}
+	#buttonSpan:active{
+		transform: translateY(0);
+	}
+	.containerTextArea a{
+		text-decoration: none;
+	}
+
+    body::-webkit-scrollbar{width:6px}
+    body::-webkit-scrollbar-track{background:rgba(0,0,0,.05);border-radius:10px}
+    body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:10px}
+    body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.35)}
+	@media screen and (max-width : 900px){
+		.containerWrapper{
+			width: 80%;
+			height: 90%;
+		}
+		.containerCardArea{
+			flex-direction: column;
+			align-items: center;
+			height: 80%;
+			gap: 1.5rem;
+		}
+		.header{
+			font-size: 3rem;
+		}
+	}
+</style>

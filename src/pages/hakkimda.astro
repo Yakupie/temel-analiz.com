@@ -1,0 +1,311 @@
+---
+import { Image } from "astro:assets";
+import backgroundImage from "../assets/background.webp";
+
+import Navbar from "../components/Navbar.astro";
+import Tech from "../components/Tech.astro";
+---
+
+<html lang="tr">
+
+<title>Hakkımda</title>
+
+<head>
+    <link rel="preload" href="/fonts/JosefinSans-Light.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ben Yakup, Fırat Üniversitesi İstatistik bölümü öğrencisi ve veriyi modern web teknolojileriyle işlemeye odaklanmış bir Full-Stack Web Developer’ım. Yazılıma duyduğum derin tutkuyu, akademik olarak aldığım analitik ve istatistiksel formasyonla birleştirerek projeler üretiyorum.
+
+Bu doğrultuda hayata geçirdiğim temelanaliz.com, finansal verilere erişimde yaşanan karmaşayı ve bilgi kirliliğini ortadan kaldırma fikrinden doğdu. Borsa İstanbul’da işlem yapan yatırımcıların, en güncel ve kritik şirket rasyolarına hiçbir reklam panosuna veya karmaşık arayüze takılmadan, en hızlı şekilde ulaşmasını hedefledim. Platformu tamamen ücretsiz, kullanıcı dostu ve süper hızlı bir yapıda, modern teknolojiler kullanarak sıfırdan inşa ettim.
+
+Benim için bu platform; sadece bir web sitesi değil, veri analitiği ile yazılım mühendisliğini harmanlayarak gerçek bir soruna getirdiğim akıllı bir çözüm. Gelecekte de yapay zekâ destekli sistemleri finansal analize entegre ederek, platformu sizler için çok daha güçlü ve nitelikli hale getirmeye devam edeceğim." />
+    <meta charset="utf-8">
+</head>
+
+<main class="container">
+    <Image src={backgroundImage} alt="Temel Analiz Arka Planı" loading="eager" fetchpriority="high" class="bgImage"/>
+	<Navbar/>
+    <div class="containerWrapper">
+        <div class="containerArea">
+            <div class="containerLeft">
+                <div class="photoArea">
+                    <div class="photo">
+                        <img alt="Profile" src="/images/pp.webp">
+                    </div>
+                    <div class="header">Yakup</div>
+                    <div class="text">Full-Stack Web Developer</div>
+                </div>
+                <div class="techArea">
+                    <div class="techs">
+                        <Tech image="/images/html.webp" text="HTML" bgColor="#C4E9D7"/>
+                        <Tech image="/images/css.webp" text="CSS" bgColor="#F7E7B4"/>
+                        <Tech image="/images/js.webp" text="JavaScript" bgColor="#FCD6CB"/>
+                        <Tech image="/images/svelte.webp" text="Svelte" bgColor="#C4E9D7"/>
+                        <Tech image="/images/qwik.webp" text="Qwik" bgColor="#F7E7B4"/>
+                        <Tech image="/images/astro.webp" text="Astro" bgColor="#FCD6CB"/>
+                        <Tech image="/images/python.webp" text="Python" bgColor="#C4E9D7"/>
+                        <Tech image="/images/c.webp" text="C" bgColor="#F7E7B4"/>
+                    </div>
+                </div>
+            </div>
+            <div class="containerRight">
+                <div class="containerRightWrapper">
+                    <div class="aboutHeader">About Me</div>
+                    <div class="aboutText">I am a Full-Stack Web Developer and a Statistics student at Fırat University who is passionate about creating modern, scalable, and visually engaging digital experiences. Since my early years, I have been deeply interested in computers, web technologies, and software development. What started as curiosity gradually became a long-term passion that continues to shape both my academic and professional journey today. I enjoy building responsive user interfaces, developing backend systems, and constantly learning new technologies to improve my skills. Beyond web development, I have a strong interest in mathematics, data analysis, and artificial intelligence. My goal is to combine software engineering with AI-driven systems and analytical thinking to create impactful, innovative, and intelligent applications that solve real-world problems.</div>
+                    <video class="aboutBanner" autoplay loop muted playsinline>
+                        <source src="/images/banner.mp4" type="video/mp4"/>
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</html>
+
+<style is:global>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    @font-face{
+		font-family: "Josefin-Sans";
+		src: url("/fonts/JosefinSans-Light.woff2") format("woff2");
+		font-display: swap;
+		font-weight: 400;
+	}
+	@font-face{
+        font-family: "Montserrat";
+        src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: swap;
+    }
+</style>
+
+<style>
+    .container{
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+	.bgImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .containerWrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 90vh;
+    }
+
+
+    .containerArea{
+        background-color: white;
+        border-radius: 2rem;
+        box-shadow: 10px 10px 10px black;
+        width: 70%;
+        height: 80%;
+        display: flex;
+    }
+
+
+    .containerLeft{
+        width: 30%;
+        border-right: 0.1rem solid black;
+        height: 100%;
+    }
+    .containerRight{
+        width: 70%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .photoArea{
+        width: 100%;
+        height: 40%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .techArea{
+        width: 100%;
+        height: 60%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .photo{
+        width: 8rem;
+        height: 8rem;
+        border-radius: 5rem;
+    }
+    .photo img{
+        object-fit: cover; 
+        object-position: center;
+        width: 100%;
+        height: 100%;
+        border-radius: 5rem;
+    }
+    .header{
+        font-family: "Montserrat", sans-serif;
+        font-size: 2rem;
+    }
+    .text{
+        font-family: "Josefin-Sans", sans-serif;
+        letter-spacing: 0.05em;
+        text-align: center;
+    }
+
+
+    .techs{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        height: 100%;
+        width: 100%;
+        gap: 1rem;
+        align-content: flex-start;
+    }
+
+
+    .aboutHeader {
+        font-family: "Montserrat", sans-serif;
+        font-size: 2.5rem;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 15px;
+    }
+
+    .aboutHeader:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 30%;
+        height: 7px;
+        background: linear-gradient(90deg, #C4E9D7, #F7E7B4, #FCD6CB, #C4E9D7);
+        background-size: 200% 100%;
+        border-radius: 2px;
+        animation: flowLine 3s linear infinite;
+    }
+    @keyframes flowLine {
+        0% {
+            background-position: 100% 0%;
+        }
+        100% {
+            background-position: -100% 0%;
+        }
+    }
+    .aboutText{
+        font-family: "Josefin-Sans", sans-serif;
+        font-size: 1.1rem;
+        color: #2e2e2e;
+    }
+    .aboutBanner{
+        width: 95%;
+        height: 40%;
+        border-radius: 2rem;
+        object-fit: cover; 
+        object-position: center;
+    }
+
+
+    .containerRightWrapper{
+        width: 95%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    @media screen and (max-width : 900px){
+        .container{
+            height: auto;
+            min-height: 100vh; 
+            padding-bottom: 2rem;
+        }
+        .containerWrapper{
+            height: auto;
+            padding-top: 2rem;
+        }
+        .containerArea{
+            width: 90%;
+            height: auto; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 2rem 0;
+        }
+        .containerLeft{
+            width: 100%;
+            height: auto;
+            border-right: none;
+            border-bottom: 0.1rem solid black; 
+            padding-bottom: 2rem;
+        }
+        .containerRight{
+            width: 100%;
+            height: auto;
+            padding-top: 2rem;
+        }
+        .photoArea{
+            width: 100%;
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+        .techArea{
+            height: auto;
+        }
+        .techs {
+            height: auto; 
+            padding: 0 1rem;
+        }
+        .aboutBanner {
+            width: 100%;
+            height: 10rem;
+            margin-top: 1rem;
+        }
+        .containerRightWrapper{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+            width: 90%;
+            height: auto; 
+            text-align: center;
+        }
+        .aboutHeader:after{
+            width: 100%;
+        }
+        
+    }
+        body::-webkit-scrollbar{width:6px}
+    body::-webkit-scrollbar-track{background:rgba(0,0,0,.05);border-radius:10px}
+    body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:10px}
+    body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.35)}
+</style>

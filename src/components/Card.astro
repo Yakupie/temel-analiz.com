@@ -1,0 +1,78 @@
+---
+
+interface Props {
+    backgroundColor?: string;
+    icon?: string;
+    number?: string;
+    text?: string;
+}
+
+const { backgroundColor , icon , text , number} = Astro.props;
+---
+
+<div class="card" style={`background-color: ${backgroundColor};`}>
+    <div class="cardWrapper">
+        <div class="icon">
+            <slot name="icon"></slot>
+        </div>
+        <div class="number">{number}</div>
+        <div class="text">{text}</div>
+    </div>
+</div>
+
+
+
+<style is:global>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    @font-face{
+        font-family: "Montserrat";
+        src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
+        font-weight: 600;
+        font-display: swap;
+    }
+</style>
+
+<style>
+    .card{
+        width: 31%;
+        min-height: 180px;
+        border-radius: 2rem;
+        box-shadow: 10px 10px 10px black;
+        transition: 0.4s ease-in-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--backgroundColor:);
+    }
+    .card:hover{
+        transform: translateY(-10px);
+    }
+
+
+    .cardWrapper{
+        width: 60%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .number{
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.2rem;
+    }
+    .text{
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.2rem;
+    }
+
+    @media screen and (max-width : 900px) {
+        .card{
+            width: 100%;
+        }
+    }
+</style>

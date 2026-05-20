@@ -1,0 +1,460 @@
+---
+import { Image } from "astro:assets"
+import Navbar from "../components/Navbar.astro"
+import backgroundImage from "../assets/background.webp";
+import { getData } from "./api/data";
+const hisseler = await getData();
+---
+<html lang="tr">
+<head>
+    <title>Hisseler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="description" content="Canlı hisse senedi verileri, anlık rasyo analizleri ve derinlemesine mali oranlar ile borsayı takip edin. Yatırımlarınızı rasyonel verilerle yönetin!">
+    <link rel="preload" href="/fonts/JosefinSans-Light.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="/fonts/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="display:none" aria-hidden="true">
+    <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </symbol>
+    <symbol id="icon-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+    </symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+    </symbol>
+    <symbol id="icon-no-results" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </symbol>
+</svg>
+
+<main class="container">
+    <Image src={backgroundImage} alt="Temel Analiz Arka Planı" loading="eager" fetchpriority="high" class="bgImage"/>
+    <Navbar/>
+    <div class="containerWrapper">
+        <div class="containerArea">
+            <div class="containerTop">
+                <div class="containerTopWrapper">
+                    <div class="searchArea">
+                        <svg class="searchIcon" aria-hidden="true">
+                            <use href="#icon-search"/>
+                        </svg>
+                        <input id="searchInput" class="searchInput" placeholder="Hisse kodu veya adı ara..." autocomplete="off" spellcheck="false">
+                    </div>
+                    <button id="filterButton" type="button">
+                        <span class="buttonSpan">
+                            <svg width="16" height="16" aria-hidden="true"><use href="#icon-filter"/></svg>
+                            Filtrele
+                        </span>
+                    </button>
+                    <button id="jsonButton" type="button">
+                        <span class="jsonButtonClass">{"{"} {"}"} JSON</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="filterPanel" class="filterPanel hidden">
+                <div class="filterPanelInner">
+                    <div class="filterTitle">
+                        <svg width="18" height="18" aria-hidden="true"><use href="#icon-filter"/></svg>
+                        Gelişmiş Filtreler
+                    </div>
+                    <div class="filterGrid">
+                        <div class="filterGroup">
+                            <label class="filterLabel">Son Fiyat (TL)</label>
+                            <div class="filterInputRow">
+                                <input type="number" class="filterInput" id="fiyatMin" placeholder="Min">
+                                <span class="filterDash">—</span>
+                                <input type="number" class="filterInput" id="fiyatMax" placeholder="Max">
+                            </div>
+                        </div>
+                        <div class="filterGroup">
+                            <label class="filterLabel">Değişim (%)</label>
+                            <div class="filterInputRow">
+                                <input type="number" class="filterInput" id="degisimMin" placeholder="Min">
+                                <span class="filterDash">—</span>
+                                <input type="number" class="filterInput" id="degisimMax" placeholder="Max">
+                            </div>
+                        </div>
+                        <div class="filterGroup">
+                            <label class="filterLabel">F/K Oranı</label>
+                            <div class="filterInputRow">
+                                <input type="number" class="filterInput" id="fkMin" placeholder="Min">
+                                <span class="filterDash">—</span>
+                                <input type="number" class="filterInput" id="fkMax" placeholder="Max">
+                            </div>
+                        </div>
+                        <div class="filterGroup">
+                            <label class="filterLabel">PD/DD Oranı</label>
+                            <div class="filterInputRow">
+                                <input type="number" class="filterInput" id="pdddMin" placeholder="Min">
+                                <span class="filterDash">—</span>
+                                <input type="number" class="filterInput" id="pdddMax" placeholder="Max">
+                            </div>
+                        </div>
+                        <div class="filterGroup">
+                            <label class="filterLabel">Piyasa Değeri (TL)</label>
+                            <div class="filterInputRow">
+                                <input type="number" class="filterInput" id="pdMin" placeholder="Min">
+                                <span class="filterDash">—</span>
+                                <input type="number" class="filterInput" id="pdMax" placeholder="Max">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filterActions">
+                        <button id="filterApply" class="filterApplyBtn" type="button">Uygula</button>
+                        <button id="filterReset" class="filterResetBtn" type="button">Sıfırla</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="containerBottom" id="tableContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="th-hisse">Hisse</th>
+                            <th class="th-hide">Son Fiyat</th>
+                            <th class="th-hide">Değişim</th>
+                            <th class="th-hide">F/K</th>
+                            <th class="th-hide">PD/DD</th>
+                            <th class="th-hide">Piyasa Değeri</th>
+                            <th>Detay</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        {hisseler.map((hisse, i) => {
+                            const isPos = parseFloat(hisse.net_degisim) >= 0;
+                            const degisimClass = `font td-hide degisim-cell ${isPos ? 'positive' : 'negative'}`;
+                            const arrow = isPos ? '▲' : '▼';
+                            const lazyAttr = i >= 50 ? 'data-lazy="true"' : '';
+                            return (
+                                <>
+                                    <tr class="main-row"
+                                        data-kisaltma={hisse.kisaltma}
+                                        data-sirket={hisse.sirket}
+                                        data-fiyat={hisse.alis}
+                                        data-degisim={hisse.net_degisim}
+                                        data-fk={hisse.fk}
+                                        data-pddd={hisse.pd_dd}
+                                        data-pd={hisse.piyasa_degeri_anahtar}
+                                    >
+                                        <td class="hisse-td">
+                                            <strong class="strong">{hisse.kisaltma}</strong><br/>
+                                            <span class="span">{hisse.sirket}</span>
+                                        </td>
+                                        <td class="font td-hide">{hisse.alis} TL</td>
+                                        <td class={degisimClass}>{arrow} {hisse.net_degisim}%</td>
+                                        <td class="font td-hide">{hisse.fk}</td>
+                                        <td class="font td-hide">{hisse.pd_dd}</td>
+                                        <td class="font td-hide">{hisse.piyasa_degeri_anahtar} TL</td>
+                                        <td class="btn-td">
+                                            <button class="table-btn" type="button" aria-label="Detay göster">
+                                                <svg width="16" height="16" aria-hidden="true"><use href="#icon-chevron"/></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="detail-row hidden">
+                                        <td colspan="7">
+                                            <div class="detail-container">
+                                                <div class="detail-header-section">
+                                                    <div class="detail-badge">{hisse.kisaltma}</div>
+                                                    <div class="detail-company-name">{hisse.sirket}</div>
+                                                    <div class={`detail-change-badge ${isPos ? 'positive' : 'negative'}`}>
+                                                        {arrow} {hisse.net_degisim}%
+                                                    </div>
+                                                </div>
+                                                <div class="detail-price-mobile">
+                                                    <span class="detail-price-label">Güncel Fiyat</span>
+                                                    <span class="detail-price-value">{hisse.alis} TL</span>
+                                                </div>
+                                                <div class="detail-metrics-grid">
+                                                    <div class="detail-metric"><div class="detail-metric-label">Son Fiyat</div><div class="detail-metric-value">{hisse.alis} TL</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">F/K Oranı</div><div class="detail-metric-value">{hisse.fk}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">PD/DD Oranı</div><div class="detail-metric-value">{hisse.pd_dd}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Piyasa Değeri</div><div class="detail-metric-value">{hisse.piyasa_degeri_anahtar} TL</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Net Kar/Özsermaye</div><div class="detail-metric-value">{hisse.net_kar_ozser}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Sermaye</div><div class="detail-metric-value">{hisse.sermaye}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Özsermaye</div><div class="detail-metric-value">{hisse.oz_sermaye}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Temettü Verimi</div><div class="detail-metric-value">{hisse.temettu_ver}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Nakit Temettü</div><div class="detail-metric-value">{hisse.nakit_temettu}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Net Kar</div><div class="detail-metric-value">{hisse.net_kar}</div></div>
+                                                    <div class="detail-metric"><div class="detail-metric-label">Senet Sayısı</div><div class="detail-metric-value">{hisse.senet_sayisi}</div></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                <div id="noResults" class="noResults hidden">
+                    <svg width="40" height="40" aria-hidden="true"><use href="#icon-no-results"/></svg>
+                    <p>Sonuç bulunamadı</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
+
+<style is:global>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    @font-face{font-family:"Josefin-Sans";src:url("/fonts/JosefinSans-Light.woff2") format("woff2");font-display:swap;font-weight:400}
+    @font-face{font-family:"Montserrat";src:url("/fonts/Montserrat-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+</style>
+
+<style>
+    body::-webkit-scrollbar{width:6px}
+    body::-webkit-scrollbar-track{background:rgba(0,0,0,.05);border-radius:10px}
+    body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:10px}
+    body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.35)}
+
+    .container{width:100%;min-height:100vh}
+    .strong{font-family:"Montserrat",sans-serif;font-size:1.2rem;color:#111;letter-spacing:-0.5px}
+    .span{font-family:"Josefin-Sans",sans-serif;font-size:.75rem;color:#666}
+    .font{font-family:"Montserrat",sans-serif;font-size:.95rem}
+    .bgImage{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-1;pointer-events:none}
+    .containerWrapper{width:100%;padding-top:1rem;padding-bottom:2rem;display:flex;justify-content:center;align-items:flex-start}
+    .containerArea{width:92%;height:90%;max-width:1400px}
+    .containerTop{width:100%;height:100%;padding:1.2rem 0;display:flex;justify-content:center;align-items:center}
+    .containerTopWrapper{width:90%;height:15vh;display:flex;justify-content:space-between;align-items:center;gap:.75rem}
+    .searchArea{flex:1;background-color:#fff;box-shadow:6px 6px 20px rgba(0,0,0,.15);border-radius:3rem;height:4rem;display:flex;align-items:center;padding:0 .9rem;gap:.5rem;transition:box-shadow .2s ease}
+    .searchArea:focus-within{box-shadow:6px 6px 24px rgba(0,0,0,.25)}
+    .searchInput{flex:1;height:100%;outline:none;border:none;font-family:"Montserrat",sans-serif;font-size:.85rem;background:transparent}
+    .searchIcon{width:17px;height:17px;color:#999;flex-shrink:0}
+    #filterButton,#jsonButton{display:flex;justify-content:center;align-items:center;height:3.5rem;min-width:0;background-color:#000;border-radius:.65rem;border:none;cursor:pointer;padding:0}
+    .buttonSpan{background-color:#fff;width:100%;height:100%;display:flex;justify-content:center;align-items:center;gap:.35rem;font-family:"Montserrat",sans-serif;font-size:.85rem;font-weight:700;border:none;border-radius:.65rem;transform:translateY(-7px);cursor:pointer;transition:transform .2s ease;padding:0 1rem;white-space:nowrap}
+    .buttonSpan:hover{transform:translateY(-10px)}
+    .buttonSpan:active{transform:translateY(0)}
+    .jsonButtonClass{background-color:#F7DF1E;width:100%;height:100%;display:flex;justify-content:center;align-items:center;gap:.3rem;font-family:"Montserrat",sans-serif;font-size:.85rem;font-weight:700;border:none;border-radius:.65rem;transform:translateY(-7px);cursor:pointer;transition:transform .2s ease;padding:0 1rem;white-space:nowrap}
+    .jsonButtonClass:hover{transform:translateY(-10px)}
+    .jsonButtonClass:active{transform:translateY(0)}
+    .filterPanel{width:100%;overflow:hidden;max-height:0;transition:max-height .4s ease,opacity .3s ease;opacity:0}
+    .filterPanel:not(.hidden){max-height:400px;opacity:1}
+    .filterPanel.hidden{display:block!important;max-height:0;opacity:0}
+    .filterPanelInner{background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-radius:1.5rem;padding:1.5rem 2rem;margin-bottom:1rem;box-shadow:0 8px 30px rgba(0,0,0,.12);border:1px solid rgba(0,0,0,.06)}
+    .filterTitle{font-family:"Montserrat",sans-serif;font-weight:700;font-size:1rem;color:#111;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+    .filterGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+    .filterGroup{display:flex;flex-direction:column;gap:.4rem}
+    .filterLabel{font-family:"Montserrat",sans-serif;font-size:.75rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.05em}
+    .filterInputRow{display:flex;align-items:center;gap:.4rem}
+    .filterInput{flex:1;min-width:0;height:2.2rem;padding:0 .7rem;border:1.5px solid #ddd;border-radius:.5rem;font-family:"Montserrat",sans-serif;font-size:.85rem;outline:none;transition:border-color .2s ease;background:#fafafa}
+    .filterInput:focus{border-color:#111;background:#fff}
+    .filterInput::-webkit-inner-spin-button,.filterInput::-webkit-outer-spin-button{-webkit-appearance:none}
+    .filterDash{color:#999;font-size:.8rem;flex-shrink:0}
+    .filterActions{display:flex;gap:.75rem;margin-top:1.2rem;justify-content:flex-end}
+    .filterApplyBtn{background:#111;color:#fff;border:none;padding:.55rem 1.6rem;border-radius:.6rem;font-family:"Montserrat",sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:background .2s,transform .15s}
+    .filterApplyBtn:hover{background:#333;transform:translateY(-1px)}
+    .filterApplyBtn:active{transform:translateY(0)}
+    .filterResetBtn{background:transparent;color:#555;border:1.5px solid #ccc;padding:.55rem 1.2rem;border-radius:.6rem;font-family:"Montserrat",sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:border-color .2s,color .2s,transform .15s}
+    .filterResetBtn:hover{border-color:#111;color:#111;transform:translateY(-1px)}
+    .filterResetBtn:active{transform:translateY(0)}
+    .containerBottom{width:100%;height:calc(100vh - 11rem);overflow-y:auto;overflow-x:hidden;background-color:transparent;border-radius:2rem;scroll-behavior:smooth}
+    .containerBottom::-webkit-scrollbar{width:6px}
+    .containerBottom::-webkit-scrollbar-track{background:rgba(0,0,0,.05);border-radius:10px}
+    .containerBottom::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:10px}
+    .containerBottom::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.35)}
+    .containerBottom table{width:100%;border-spacing:0 10px;padding:0 10px;border-collapse:separate;text-align:center}
+    .containerBottom table th{font-size:1rem;font-family:"Montserrat",sans-serif;color:#555;font-weight:700;letter-spacing:.05rem;border-bottom:2px solid rgba(0,0,0,.1);padding-bottom:.7rem}
+    .containerBottom table thead{height:3.5rem}
+    .containerBottom tbody tr.main-row{
+        transition:filter .2s ease;
+        background-color:#fff;
+        contain:layout style;
+    }
+    .containerBottom tbody tr.main-row:hover{filter:brightness(.97)}
+    .containerBottom tbody td{padding:16px 8px;background-color:transparent!important;border-top:1px solid rgba(0,0,0,.04);border-bottom:1px solid rgba(0,0,0,.04)}
+    .containerBottom tbody tr td:first-child{border-left:1px solid rgba(0,0,0,.04);border-top-left-radius:1.5rem;border-bottom-left-radius:1.5rem}
+    .containerBottom tbody tr td:last-child{border-right:1px solid rgba(0,0,0,.04);border-top-right-radius:1.5rem;border-bottom-right-radius:1.5rem}
+    .btn-td{display:flex;justify-content:center;align-items:center}
+    .table-btn{width:2.2rem;height:2.2rem;border-radius:50%;border:2px solid #111;background-color:transparent;color:#111;display:flex;justify-content:center;align-items:center;cursor:pointer;transition:transform .3s ease,background-color .2s ease}
+    .table-btn:hover{transform:scale(1.12);background:#f5f5f5}
+    .table-btn.active{transform:rotate(180deg);background:#111;color:#fff}
+    .table-btn.active svg{stroke:#fff}
+    .degisim-cell.positive{color:#16a34a}
+    .degisim-cell.negative{color:#dc2626}
+    .detail-row.hidden{display:none}
+    .detail-row td{padding:0!important;background:transparent!important;border:none!important}
+    .detail-container{background:linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#111 100%);border-radius:1.5rem;padding:1.8rem 2rem;margin:4px 4px 10px;color:#fff;overflow:hidden;animation:detailSlideIn .3s ease}
+    @keyframes detailSlideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+    .detail-header-section{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .detail-badge{background:#fff;color:#111;font-family:"Montserrat",sans-serif;font-weight:700;font-size:1.4rem;padding:.3rem 1rem;border-radius:.6rem;letter-spacing:-0.5px}
+    .detail-company-name{font-family:"Josefin-Sans",sans-serif;font-size:1rem;color:rgba(255,255,255,.7);flex:1}
+    .detail-change-badge{font-family:"Montserrat",sans-serif;font-weight:700;font-size:.9rem;padding:.3rem .9rem;border-radius:2rem}
+    .detail-change-badge.positive{background:rgba(22,163,74,.2);color:#4ade80;border:1px solid rgba(22,163,74,.3)}
+    .detail-change-badge.negative{background:rgba(220,38,38,.2);color:#f87171;border:1px solid rgba(220,38,38,.3)}
+    .detail-price-mobile{display:none}
+    .detail-metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;background:rgba(255,255,255,.05);border-radius:1rem;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
+    .detail-metric{padding:1rem 1.1rem;background:rgba(255,255,255,.03);transition:background .2s ease}
+    .detail-metric:hover{background:rgba(255,255,255,.08)}
+    .detail-metric-label{font-family:"Josefin-Sans",sans-serif;font-size:.7rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+    .detail-metric-value{font-family:"Montserrat",sans-serif;font-weight:700;font-size:1rem;color:rgba(255,255,255,.95)}
+    .noResults{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:3rem;color:rgba(255,255,255,.7);font-family:"Montserrat",sans-serif;font-size:1rem}
+    .noResults.hidden{display:none}
+
+    @media screen and (max-width:1100px){.containerTopWrapper{width:95%}}
+    @media screen and (max-width:768px){
+        .containerTopWrapper{flex-direction:column;width:100%;gap:.75rem;height:20vh}
+        .searchArea{width:100%;height:3rem}
+        #filterButton,#jsonButton{width:48%;height:3rem}
+        .buttonSpan,.jsonButtonClass{font-size:.85rem}
+        .th-hide,.td-hide{display:none}
+        .th-hisse{text-align:left;padding-left:1rem}
+        .hisse-td{text-align:left;padding-left:1rem!important}
+        .containerBottom table{border-spacing:0 8px;padding:0 4px}
+        .containerBottom tbody td{padding:14px 6px}
+        .containerBottom tbody tr td:first-child{border-top-left-radius:1rem;border-bottom-left-radius:1rem}
+        .containerBottom tbody tr td:last-child{border-top-right-radius:1rem;border-bottom-right-radius:1rem}
+        .detail-container{padding:1.2rem;margin:2px 0 6px;border-radius:1rem}
+        .detail-price-mobile{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.07);border-radius:.75rem;padding:.8rem 1rem;margin-bottom:1rem}
+        .detail-price-label{font-family:"Josefin-Sans",sans-serif;font-size:.75rem;color:rgba(255,255,255,.5);text-transform:uppercase}
+        .detail-price-value{font-family:"Montserrat",sans-serif;font-weight:700;font-size:1.2rem;color:#fff}
+        .detail-metrics-grid{grid-template-columns:repeat(2,1fr)}
+        .detail-metric{padding:.8rem}
+        .detail-metric-value{font-size:.9rem}
+        .detail-badge{font-size:1.1rem}
+        .detail-company-name{font-size:.85rem;width:100%;flex:none}
+        .detail-header-section{gap:.6rem;margin-bottom:1rem}
+        .filterPanelInner{padding:1.2rem}
+        .filterGrid{grid-template-columns:1fr 1fr;gap:.75rem}
+        #filterButton,#jsonButton{display:flex;justify-content:center;width:calc(50% - .375rem)}
+        .containerTopWrapper>#filterButton,.containerTopWrapper>#jsonButton{flex:1}
+    }
+    @media screen and (max-width:420px){
+        .filterGrid{grid-template-columns:1fr}
+        .detail-metrics-grid{grid-template-columns:1fr 1fr}
+        .strong{font-size:1rem}
+        .containerBottom table th{font-size:.85rem}
+    }
+</style>
+
+<script>
+(function() {
+    'use strict';
+
+    const tableBody = document.getElementById('tableBody');
+    tableBody?.addEventListener('click', function(e: Event) {
+        const btn = (e.target as Element).closest('.table-btn');
+        if (!btn) return;
+        const mainRow = btn.closest('.main-row');
+        if (!mainRow) return;
+        const detailRow = mainRow.nextElementSibling;
+        if (detailRow?.classList.contains('detail-row')) {
+            const isHidden = detailRow.classList.contains('hidden');
+            detailRow.classList.toggle('hidden', !isHidden);
+            btn.classList.toggle('active', isHidden);
+        }
+    });
+
+    const filterPanel = document.getElementById('filterPanel')!;
+    document.getElementById('filterButton')?.addEventListener('click', () => {
+        filterPanel.classList.toggle('hidden');
+    });
+
+    function debounce<T extends (...args: any[]) => void>(fn: T, ms: number): T {
+        let t: ReturnType<typeof setTimeout>;
+        return ((...args: any[]) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); }) as T;
+    }
+
+    const allMainRows = Array.from(document.querySelectorAll<HTMLTableRowElement>('.main-row'));
+
+    const getVal = (id: string): number | null => {
+        const v = (document.getElementById(id) as HTMLInputElement)?.value.trim();
+        return v === '' ? null : parseFloat(v);
+    };
+    const inRange = (val: string, min: number | null, max: number | null): boolean => {
+        const n = parseFloat(val);
+        if (isNaN(n)) return true;
+        if (min !== null && n < min) return false;
+        if (max !== null && n > max) return false;
+        return true;
+    };
+
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    const noResults = document.getElementById('noResults')!;
+
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const fiyatMin = getVal('fiyatMin'), fiyatMax = getVal('fiyatMax');
+        const degisimMin = getVal('degisimMin'), degisimMax = getVal('degisimMax');
+        const fkMin = getVal('fkMin'), fkMax = getVal('fkMax');
+        const pdddMin = getVal('pdddMin'), pdddMax = getVal('pdddMax');
+        const pdMin = getVal('pdMin'), pdMax = getVal('pdMax');
+        const hasFilter = query || fiyatMin !== null || fiyatMax !== null ||
+            degisimMin !== null || degisimMax !== null || fkMin !== null || fkMax !== null ||
+            pdddMin !== null || pdddMax !== null || pdMin !== null || pdMax !== null;
+
+        let visible = 0;
+
+        const visibility: boolean[] = allMainRows.map(row => {
+            if (!hasFilter) return true;
+            const d = row.dataset;
+            const matchSearch = !query || (d.kisaltma?.toLowerCase() ?? '').includes(query) || (d.sirket?.toLowerCase() ?? '').includes(query);
+            if (!matchSearch) return false;
+            return inRange(d.fiyat ?? '', fiyatMin, fiyatMax) &&
+                   inRange(d.degisim ?? '', degisimMin, degisimMax) &&
+                   inRange(d.fk ?? '', fkMin, fkMax) &&
+                   inRange(d.pddd ?? '', pdddMin, pdddMax) &&
+                   inRange(d.pd ?? '', pdMin, pdMax);
+        });
+
+        requestAnimationFrame(() => {
+            allMainRows.forEach((row, i) => {
+                const show = visibility[i];
+                const displayVal = show ? '' : 'none';
+                if (row.style.display !== displayVal) row.style.display = displayVal;
+                const detailRow = row.nextElementSibling as HTMLTableRowElement;
+                if (detailRow?.classList.contains('detail-row') && detailRow.style.display !== displayVal) {
+                    detailRow.style.display = displayVal;
+                }
+                if (show) visible++;
+            });
+            noResults.classList.toggle('hidden', visible > 0);
+        });
+    }
+
+    searchInput?.addEventListener('input', debounce(applyFilters, 150));
+    document.getElementById('filterApply')?.addEventListener('click', applyFilters);
+    document.getElementById('filterReset')?.addEventListener('click', () => {
+        ['fiyatMin','fiyatMax','degisimMin','degisimMax','fkMin','fkMax','pdddMin','pdddMax','pdMin','pdMax']
+            .forEach(id => (document.getElementById(id) as HTMLInputElement).value = '');
+        searchInput.value = '';
+        applyFilters();
+    });
+
+    document.getElementById('jsonButton')?.addEventListener('click', () => {
+        const data = allMainRows
+            .filter(row => row.style.display !== 'none')
+            .map(row => ({
+                kisaltma: row.dataset.kisaltma,
+                sirket: row.dataset.sirket,
+                fiyat: row.dataset.fiyat,
+                degisim: row.dataset.degisim,
+                fk: row.dataset.fk,
+                pddd: row.dataset.pddd,
+                piyasa_degeri: row.dataset.pd,
+            }));
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement('a'), { href: url, download: 'data.json' });
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    if ('IntersectionObserver' in window) {
+        const tableContainer = document.getElementById('tableContainer');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                (entry.target as HTMLElement).style.contentVisibility = entry.isIntersecting ? 'visible' : 'auto';
+            });
+        }, { root: tableContainer, rootMargin: '200px 0px', threshold: 0 });
+        allMainRows.forEach(row => observer.observe(row));
+    }
+})();
+</script>

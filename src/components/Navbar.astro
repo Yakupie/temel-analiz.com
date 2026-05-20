@@ -1,0 +1,409 @@
+---
+import GithubIcon from "../../public/icons/GithubIcon.astro"
+import HamburgerMenuIcon from "../../public/icons/HamburgerMenuIcon.astro"
+---
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<div class="navbar">
+    <div class="navbarWrapper">
+        <div class="logoArea">
+            <div class="logo">
+                <img src="/images/logo.webp"  fetchpriority="high" width="380" height="90" alt="Logo">
+            </div>
+        </div>
+        <div class="ulArea">
+            <div class="ulWrapper">
+                <div class="ulContent">
+                    <ul>
+                        <li><a href="/">Ana Sayfa</a></li>
+                        <li><a href="/hisseler">Hisseler</a></li>
+                        <li><a href="/hakkimda">Hakkımda</a></li>
+                    </ul>
+                </div>
+                <div class="buttonArea">
+                    <div class="githubButtonArea">
+                        <a href="https://github.com/Yakupie">
+                            <button id="githubButton">
+                                <span class="buttonTop">
+                                    <GithubIcon className="githubIcon"/>
+                                    Github
+                                </span>
+                            </button>
+                        </a>
+                    </div>
+                    <div class="hamburgerMenuArea">
+                        <HamburgerMenuIcon className="hamburgerMenuIcon"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mobile-menu">
+    <div class="mobileHamburgerMenuArea">
+        <HamburgerMenuIcon className="mobileHamburgerMenuIcon"/>
+    </div>
+    <div class="mobileLogoArea">
+        <div class="logo">
+            <img src="/images/logo.webp" width="380" height="90" alt="Logo">
+        </div>
+    </div>
+    <div class="mobileUlArea">
+        <ul>
+            <li><a href="/">Ana Sayfa</a></li>
+            <li><a href="/hisseler">Hisseler</a></li>
+            <li><a href="/hakkimda">Hakkımda</a></li>
+        </ul>
+    </div>
+    <div class="mobileButtonArea">
+        <a href="https://github.com/Yakupie">
+            <button id="mobileGithubButton">
+                <span class="mobileButtonTop">
+                    <GithubIcon className="mobileGithubButton"/>
+                    Github
+                </span>
+            </button>
+        </a>
+    </div>
+</div>
+
+
+
+
+<style is:inline>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+    @font-face{
+        font-family: "Montserrat";
+        src: url("/fonts/Montserrat-Bold.woff2") format("woff2");
+        font-display: swap;
+        font-weight: 700;
+    }
+
+    .navbar{
+        width: 100%;
+        height: 10vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .navbarWrapper{
+        width: 80%;
+        height: 90%;
+        display: flex;
+    }
+
+
+    .logoArea{
+        width: 20%;
+        height: 100%;
+    }
+    .ulArea{
+        width: 80%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+
+    .logo{
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    .logo img{
+        width: 100%;
+        height: 100%;
+    }
+
+
+    .ulWrapper{
+        background-color: white;
+        width: 70%;
+        height: 90%;
+        border-radius: 5rem;
+        display: flex;
+        box-shadow: 0px 10px 10px black;
+    }
+
+    .ulContent{
+        width: 70%;
+        height: 100%;
+        border-radius: 2rem 0rem 0rem 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .buttonArea{
+        width: 30%;
+        height: 100%;
+        border-radius: 0rem 2rem 2rem 0rem;
+        display: flex;
+    }
+
+
+    .ulContent ul{
+        list-style-type: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5%;
+        width: 100%;
+        height: 100%;
+    }
+    .ulContent ul li a{
+        text-decoration: none;
+        font-size: 1.1rem;
+        color: black;
+        font-family: "Montserrat", sans-serif;
+    }
+    .ulContent ul li{
+        transition: transform 0.3s ease-in-out;
+    }
+    .ulContent ul li:hover{
+        transform: translateY(-3px);
+    }
+
+
+    .hamburgerMenuArea{
+        display: none;
+        cursor: pointer;
+    }
+
+
+    .githubButtonArea{
+        width: 100%;
+        height: 100%;
+        border-radius: 0rem 2rem 2rem 0rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .githubButtonArea a{
+        width: 80%;
+        height: 70%;
+    }
+
+
+    #githubButton{
+        width: 100%;
+        height: 100%;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.4rem;
+        color: black;
+        border-radius: 2rem;
+        cursor: pointer;
+        background: #000000;
+        outline: none;
+    }
+    .buttonTop{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        height: 100%;
+        transform: translateY(-0.25em);
+        background-color: white;
+        border-radius: 2rem;
+        border-top: none;
+        transition: 0.2s ease-in-out;
+    }
+    .buttonTop:hover{
+        transform: translateY(-0.3em);
+    }
+    .buttonTop:active{
+        transform: translateY(0);
+    }
+
+
+    .mobile-menu.active{
+        opacity: 1;
+        transform: translateX(0);
+    }
+    .mobile-menu{
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 60%;
+        height: 100%;
+        background-color: white;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        z-index: 10;
+    }
+    .mobileLogoArea{
+        width: 100%;
+        height: 8vh;
+    }
+    .mobileUlArea{
+        width: 100%;
+        height: 25vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .mobileButtonArea{
+        width: 100%;
+        height: 9vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .mobileUlArea ul{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 2rem;
+        list-style-type: none;
+    }
+    .mobileUlArea ul li a{
+        text-decoration: none;
+        font-family: "Montserrat", sans-serif;
+        color: black;
+        font-size: 1.4rem;
+    }
+    .mobileButtonArea a{
+        width: 80%;
+        height: 70%;
+        text-decoration: none;
+    }
+    #mobileGithubButton{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        gap: 0.5rem;
+        font-family: "Montserrat", sans-serif;
+        background-color: black;
+        color: black;
+        border: none;
+        border-radius: 2rem;
+        box-shadow: 0px 0px 10px white;
+        cursor: pointer;
+    }
+    .mobileButtonTop{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        background: white;
+        width: 100%;
+        height: 100%;
+        transform: translateY(-6px);
+        border-top: none;
+        border-radius: 2rem;
+        transition: 0.2s ease-in-out;
+    }
+    .mobileButtonTop:hover{
+        transform: translateY(-7px);
+    }
+    .mobileButtonTop:active{
+        transform: translateY(0);
+    }
+    .mobileHamburgerMenuArea{
+        width: 100%;
+        height: 10%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-right: 2rem;
+    }
+    @media (min-width : 1250px) and (max-width : 1400px){
+        .ulWrapper{
+            width: 80%;
+        }
+        .logoArea{
+            width: 30%;
+        }
+    }
+    
+
+    @media (min-width : 900px) and (max-width : 1250px){
+        .ulWrapper{
+            width: 100%;
+        }
+        .navbarWrapper{
+            width: 100%;
+        }
+        .logoArea{
+            width: 40%;
+        }
+        .ulContent ul li a{
+            font-size: 1rem;
+        }
+        #githubButton{
+            font-size: 1rem;
+        }
+    }
+    @media (max-width : 900px){
+        .hamburgerMenuArea{
+            display: block;
+            width: 20%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbarWrapper{
+            width: 95%;
+        }
+        .logoArea{
+            display: none;
+        }
+        .ulContent{
+            display: none;
+        }
+        .githubButtonArea{
+            display: none;
+        }
+        .ulWrapper{
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            box-shadow: none;
+        }
+        .buttonArea{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .ulArea{
+            width: 100%;
+            height: 100%;
+        }
+    }
+</style>
+
+<script>
+    const mobileMenu = document.querySelector(".mobile-menu")
+    const hamburgerMenuIcon = document.querySelector(".hamburgerMenuIcon")
+    const mobileMenuIcon = document.querySelector(".mobileHamburgerMenuIcon")
+
+    hamburgerMenuIcon?.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('active')
+    })
+    mobileMenuIcon?.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('active')
+    })
+</script>
