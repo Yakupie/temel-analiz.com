@@ -8,7 +8,6 @@ Bu proje, finansal/veri analizi üzerine geliştirilmiş bir web uygulamasıdır
 
 ## Kullanılan Teknolojiler
 
--  :contentReference[oaicite:0]{index=0} (modern, hızlı ve component tabanlı yapı)
 -  Python (veri çekme ve veri işleme)
 -  JSON (veri aktarımı ve frontend kullanımı)
 -  Responsive Web Tasarım
